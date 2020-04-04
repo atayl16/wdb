@@ -1,9 +1,13 @@
-var express = require("express"),
-	app = express(),
-	bodyParser = require("body-parser"),
-	mongoose = require("mongoose")
-mongoose.connect("mongodb+srv://atayl16:12121430@alisha-fjrqz.mongodb.net/alisha", {useNewUrlParser: true, useUnifiedTopology: true});
-// mongoose.connect("mongodb+srv://atayl16:12121430@alisha-fjrqz.mongodb.net/test?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true});
+var express     = require("express"),
+    app         = express(),
+    bodyParser  = require("body-parser"),
+    mongoose    = require("mongoose")
+
+console.log(process.env.DATABASEURL);
+
+// mongoose.connect("mongodb+srv://atayl16:12121430@alisha-fjrqz.mongodb.net/alisha", {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(process.env.DATABASEURL, {useNewUrlParser: true, useUnifiedTopology: true});
+
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
@@ -17,12 +21,11 @@ var campgroundSchema = new mongoose.Schema({
 
 var Campground = mongoose.model("Campground", campgroundSchema);
 
-//Use this to create a campground if you wipe the DB (but try not to break it so bad you need to wipe it!)
 // Campground.create(
 //      {
-//          name: "Salmon Creek", 
-//          image: "https://cdn.pixabay.com/photo/2017/10/07/01/01/bach-leek-2825197_960_720.jpg",
-//          description: "This is a lovely campground with a creek... that has salmon in it!"
+//          name: "Granite Hill", 
+//          image: "https://farm1.staticflickr.com/60/215827008_6489cd30c3.jpg",
+//          description: "This is a huge granite hill, no bathrooms.  No water. Beautiful granite!"
          
 //      },
 //      function(err, campground){
@@ -34,16 +37,14 @@ var Campground = mongoose.model("Campground", campgroundSchema);
 //       }
 //     });
 
-
-app.use(bodyParser.urlencoded({extended: true}));
-app.set("view engine", "ejs");
-
 app.get("/", function(req, res){
-	res.render("landing");
+    res.render("landing");
 });
 
+//INDEX - show all campgrounds
 app.get("/campgrounds", function(req, res){
-	Campground.find({}, function(err, allCampgrounds){
+    // Get all campgrounds from DB
+    Campground.find({}, function(err, allCampgrounds){
        if(err){
            console.log(err);
        } else {
@@ -52,11 +53,14 @@ app.get("/campgrounds", function(req, res){
     });
 });
 
+//CREATE - add new campground to DB
 app.post("/campgrounds", function(req, res){
-	var name = req.body.name;
-	var image = req.body.image;
-	 var desc = req.body.description;
+    // get data from form and add to campgrounds array
+    var name = req.body.name;
+    var image = req.body.image;
+    var desc = req.body.description;
     var newCampground = {name: name, image: image, description: desc}
+    // Create a new campground and save to DB
     Campground.create(newCampground, function(err, newlyCreated){
         if(err){
             console.log(err);
@@ -67,10 +71,12 @@ app.post("/campgrounds", function(req, res){
     });
 });
 
+//NEW - show form to create new campground
 app.get("/campgrounds/new", function(req, res){
-	res.render("new");	
+   res.render("new.ejs"); 
 });
 
+// SHOW - shows more info about one campground
 app.get("/campgrounds/:id", function(req, res){
     //find the campground with provided ID
     Campground.findById(req.params.id, function(err, foundCampground){
@@ -83,6 +89,8 @@ app.get("/campgrounds/:id", function(req, res){
     });
 })
 
-app.listen(3000, function() { 
-  console.log('The YelpCamp server has started'); 
+
+var port = 3000 || process.env.PORT;
+app.listen(port, function() {
+    console.log("Server is listening");
 });
