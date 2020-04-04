@@ -6,7 +6,7 @@ var express     = require("express"),
 console.log(process.env.DATABASEURL);
 
 // mongoose.connect("mongodb+srv://atayl16:12121430@alisha-fjrqz.mongodb.net/alisha", {useNewUrlParser: true, useUnifiedTopology: true});
-mongoose.connect(process.env.DATABASEURL, {useNewUrlParser: true, useUnifiedTopology: true});
+// mongoose.connect(process.env.DATABASEURL, {useNewUrlParser: true, useUnifiedTopology: true});
 
 
 app.use(bodyParser.urlencoded({extended: true}));
