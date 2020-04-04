@@ -2,7 +2,7 @@ var express = require("express"),
 	app = express(),
 	bodyParser = require("body-parser"),
 	mongoose = require("mongoose")
-mongoose.connect("mongodb+srv://atayl16:<password>@alisha-fjrqz.mongodb.net/alisha?retryWrites=true&w=majority", {useNewUrlParser: true});
+mongoose.connect("mongodb+srv://atayl16:12121430@alisha-fjrqz.mongodb.net/alisha?retryWrites=true&w=majority", {useNewUrlParser: true});
 // mongoose.connect("mongodb+srv://atayl16:12121430@alisha-fjrqz.mongodb.net/test?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true});
 
 app.use(bodyParser.urlencoded({extended: true}));
