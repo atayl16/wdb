@@ -5,9 +5,7 @@ var express     = require("express"),
 
 console.log(process.env.DATABASEURL);
 
-// mongoose.connect("mongodb+srv://atayl16:12121430@alisha-fjrqz.mongodb.net/alisha", {useNewUrlParser: true, useUnifiedTopology: true});
-// mongoose.connect(process.env.DATABASEURL, {useNewUrlParser: true, useUnifiedTopology: true});
-mongoose.connect(process.env.DATABASEURL), {useNewUrlParser: true, useUnifiedTopology: true};
+mongoose.connect(process.env.DATABASEURL, {useNewUrlParser: true, useUnifiedTopology: true});
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
@@ -20,22 +18,6 @@ var campgroundSchema = new mongoose.Schema({
 });
 
 var Campground = mongoose.model("Campground", campgroundSchema);
-
-// Campground.create(
-//      {
-//          name: "Granite Hill", 
-//          image: "https://farm1.staticflickr.com/60/215827008_6489cd30c3.jpg",
-//          description: "This is a huge granite hill, no bathrooms.  No water. Beautiful granite!"
-         
-//      },
-//      function(err, campground){
-//       if(err){
-//           console.log(err);
-//       } else {
-//           console.log("NEWLY CREATED CAMPGROUND: ");
-//           console.log(campground);
-//       }
-//     });
 
 app.get("/", function(req, res){
     res.render("landing");
