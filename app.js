@@ -2,18 +2,16 @@ var express     = require("express"),
     app         = express(),
     bodyParser  = require("body-parser"),
     mongoose    = require("mongoose"),
-	Campground  = require("./models/campground"),
-	seedDB      = require("./models/seed"),
-	Comment     = require("./models/comment")
+    Campground  = require("./models/campground"),
+    Comment     = require("./models/comment"),
+    seedDB      = require("./seeds")
 
 mongoose.connect(process.env.DATABASEURL, {useNewUrlParser: true, useUnifiedTopology: true});
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static("public"));
-
-//Seed the seedDB
-// seedDB();
+seedDB();
 
 app.get("/", function(req, res){
     res.render("landing");
@@ -106,7 +104,6 @@ app.post("/campgrounds/:id/comments", function(req, res){
    //connect new comment to campground
    //redirect campground show page
 });
-
 
 var port = process.env.PORT || 3000;
 app.listen(port, function () {
