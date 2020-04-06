@@ -1,7 +1,6 @@
+
 .thumbnail img {
     width: 100%;
-	height: fit-content;
-    max-height: 220px;
 }
 
 .thumbnail {
