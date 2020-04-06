@@ -2,32 +2,33 @@ var express     = require("express"),
     app         = express(),
     bodyParser  = require("body-parser"),
     mongoose    = require("mongoose"),
-	passport    = require("passport"),
+    passport    = require("passport"),
     LocalStrategy = require("passport-local"),
+	methodOverride = require("method-override"),
     Campground  = require("./models/campground"),
     Comment     = require("./models/comment"),
-	User        = require("./models/user")
-    // seedDB      = require("./seeds")
-
-var commentRoutes   = require("./routes/comments"),
-	campgroundRoutes = require("./routes/campgrounds"),
-	authRoutes       = require("./routes/index")
-
+    User        = require("./models/user"),
+    seedDB      = require("./seeds")
+    
+//requring routes
+var commentRoutes    = require("./routes/comments"),
+    campgroundRoutes = require("./routes/campgrounds"),
+    indexRoutes      = require("./routes/index")
 
 mongoose.connect(process.env.DATABASEURL, {useNewUrlParser: true, useUnifiedTopology: true});
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
-app.use(express.static("public"));
-// seedDB();
+app.use(express.static(__dirname + "/public"));
+app.use(methodOverride("_method"))
+// seedDB(); //seed the database
 
-//Passport Config
+// PASSPORT CONFIGURATION
 app.use(require("express-session")({
-	secret: "Once again, I'm not telling the secret",
-	resave: false,
-	saveUninitialized:false
+    secret: "Once again Rusty wins cutest dog!",
+    resave: false,
+    saveUninitialized: false
 }));
-
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
@@ -39,9 +40,9 @@ app.use(function(req, res, next){
    next();
 });
 
-app.use(authRoutes);
-app.use(commentRoutes);
-app.use(campgroundRoutes);
+app.use("/", indexRoutes);
+app.use("/campgrounds", campgroundRoutes);
+app.use("/campgrounds/:id/comments", commentRoutes);
 
 var port = process.env.PORT || 3000;
 app.listen(port, function () {
